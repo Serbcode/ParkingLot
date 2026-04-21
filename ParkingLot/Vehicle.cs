@@ -1,11 +1,5 @@
 namespace ParkingLotSystem;
 
-public record Truck(string LicensePlate) : Vehicle(LicensePlate, VehicleSize.Large);
-
-public record Motorcycle(string LicensePlate) : Vehicle(LicensePlate, VehicleSize.Small);
-
-public record Car(string LicensePlate) : Vehicle(LicensePlate, VehicleSize.Medium);
-
 public abstract record Vehicle(string LicensePlate, VehicleSize Size);
 
 public enum VehicleSize
@@ -14,3 +8,9 @@ public enum VehicleSize
     Medium = 2,
     Large = 3
 }
+
+public record Truck(string LicensePlate) : Vehicle(LicensePlate, VehicleSize.Large);
+
+public record Motorcycle(string LicensePlate) : Vehicle(LicensePlate, VehicleSize.Small);
+
+public record Car(string LicensePlate) : Vehicle(LicensePlate, VehicleSize.Medium);

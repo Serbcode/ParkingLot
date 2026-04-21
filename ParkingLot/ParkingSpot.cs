@@ -25,7 +25,9 @@ public class ParkingSpot(int spotNumber, VehicleSize size)
         AssignedVehicle = vehicle;
     }
 
-    public bool IsAvailable => AssignedVehicle == null;
+    public bool IsAvailable => AssignedVehicle is null;
+
+    public bool IsTaken => !IsAvailable;
 
     public virtual void Release()
     {
@@ -40,6 +42,6 @@ public class ParkingSpot(int spotNumber, VehicleSize size)
 
 public class CompactSpot(int SpotNumber) : ParkingSpot(SpotNumber, VehicleSize.Small);
 
-public class OversizedSpot(int SpotNumber) : ParkingSpot(SpotNumber, VehicleSize.Large);
-
 public class RegularSpot(int SpotNumber) : ParkingSpot(SpotNumber, VehicleSize.Medium);
+
+public class OversizedSpot(int SpotNumber) : ParkingSpot(SpotNumber, VehicleSize.Large);

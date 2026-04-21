@@ -6,20 +6,19 @@ public static class Program
     {
         var vehicle1 = new Car("ABC123");
         var vehicle2 = new Motorcycle("XYZ789");
-        Console.WriteLine(string.Join(Environment.NewLine, vehicle1, vehicle2));
+
+        var parkingSpots = new List<ParkingSpot>
+        {
+            new CompactSpot(1),
+            new RegularSpot(2),
+            new OversizedSpot(3)
+        };
+        var pm = new ParkingManager(parkingSpots);
+
+        pm.ParkVehicle(vehicle1);
+        pm.ParkVehicle(vehicle2);
     }
 }
-
-/// <summary>
-/// manages a collection of spots and handles assignments.
-/// </summary>
-class ParkingLot { }
-
-/// <summary>
-/// stores entry time and calculates the fee.
-/// </summary>
-class Ticket { }
-
 
 
 
