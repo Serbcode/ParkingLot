@@ -36,7 +36,13 @@ public class ParkingSpot(int spotNumber, VehicleSize size)
 
     public override string ToString()
     {
-        return $"Spot {SpotNumber} ({Size}) - {(IsAvailable ? "Available" : $"Occupied by {AssignedVehicle}")}";
+        return this switch
+        {
+            CompactSpot => $"[🏍️- {AssignedVehicle?.LicensePlate}]",
+            RegularSpot => $"[🚗 - {AssignedVehicle?.LicensePlate}]",
+            OversizedSpot => $"[🚚 - {AssignedVehicle?.LicensePlate}]",
+            _ => $"[Unknown Spot {SpotNumber}]"
+        };
     }
 }
 

@@ -17,16 +17,24 @@ public class ParkingManager
 
     public bool ParkVehicle(Vehicle vehicle)
     {
-        var spot = _parkingSpots.FirstOrDefault(s => s.IsAvailable && s.Size >= vehicle.Size);
-        if (spot is null)
+        var spotMatch = _parkingSpots.FirstOrDefault(s => s.IsAvailable && s.Size == vehicle.Size);
+        if (spotMatch is not null)
         {
-            Console.WriteLine($"No available spot for vehicle {vehicle}");
-            return false;
+            spotMatch.AssignVehicle(vehicle);
+            Console.WriteLine($"Parked vehicle {vehicle} in spot {spotMatch.SpotNumber}");
+            return true;
         }
 
-        spot.AssignVehicle(vehicle);
-        Console.WriteLine($"Parked vehicle {vehicle} in spot {spot.SpotNumber}");
-        return true;
+        var validSpot = _parkingSpots.FirstOrDefault(s => s.IsAvailable && s.Size > vehicle.Size);
+        if (validSpot is not null)
+        {
+            validSpot.AssignVehicle(vehicle);
+            Console.WriteLine($"Parked vehicle {vehicle} in spot {validSpot.SpotNumber}");
+            return true;
+        }
+
+        Console.WriteLine($"No available spot for vehicle {vehicle}");
+        return false;
     }
 
     public bool ReleaseVehicle(string licensePlate)
@@ -41,5 +49,10 @@ public class ParkingManager
         spot.Release();
         Console.WriteLine($"Released vehicle with license plate {licensePlate} from spot {spot.SpotNumber}");
         return true;
+    }
+
+    internal void Dump()
+    {
+        Console.WriteLine(string.Join(" ", _parkingSpots.Select(s => s.ToString())));
     }
 }
