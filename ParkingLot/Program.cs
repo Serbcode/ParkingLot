@@ -1,4 +1,6 @@
-﻿namespace ParkingLotSystem;
+﻿using ParkingLotSystem.CalculationStrategies;
+
+namespace ParkingLotSystem;
 
 public static class Program
 {
@@ -25,6 +27,18 @@ public static class Program
         pm.ParkVehicle(vehicle2);
 
         pm.Dump();
+
+        FareCalculator fareCalculator = new FareCalculator(new PeakHoursFareStrategy());
+        var ticket1 = new Ticket("TICKET-001", vehicle1, parkingSpots[1], DateTime.Now.AddHours(-3), DateTime.Now);
+        var ticket2 = new Ticket("TICKET-002", vehicle2, parkingSpots[3], DateTime.Now.AddHours(-1), DateTime.Now);
+
+        fareCalculator.OnFeeCalculated += (sender, args) =>
+        {
+            Console.WriteLine($"Fare calculated: {args}");
+        };
+
+        fareCalculator.CalculateFare(ticket1);
+        fareCalculator.CalculateFare(ticket2);
     }
 }
 
