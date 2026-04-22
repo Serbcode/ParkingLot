@@ -6,8 +6,8 @@ public static class Program
 {
     public static void Main()
     {
-        var vehicle1 = new Car("IM 282 BA");
-        var vehicle2 = new Motorcycle("VA 001 NO");
+        var vehicle1 = new Car("CAR 282 BA");
+        var vehicle2 = new Motorcycle("MOTO 001 NO");
 
         var parkingSpots = new List<ParkingSpot>
         {
@@ -34,7 +34,7 @@ public static class Program
 
         fareCalculator.OnFeeCalculated += (sender, args) =>
         {
-            Console.WriteLine($"Fare calculated: {args}");
+            Console.WriteLine($"Fare calculated for {args.Ticket.Vehicle.LicensePlate}: {args.Fare:C}");
         };
 
         fareCalculator.CalculateFare(ticket1);
