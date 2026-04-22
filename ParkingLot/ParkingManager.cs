@@ -15,14 +15,14 @@ public class ParkingManager
     public IReadOnlyCollection<ParkingSpot> AvailableSpots =>
         _parkingSpots.Where(s => s.IsAvailable).ToList();
 
-    public bool ParkVehicle(Vehicle vehicle)
+    public ParkingSpot? ParkVehicle(Vehicle vehicle)
     {
         var spotMatch = _parkingSpots.FirstOrDefault(s => s.IsAvailable && s.Size == vehicle.Size);
         if (spotMatch is not null)
         {
             spotMatch.AssignVehicle(vehicle);
             Console.WriteLine($"Parked vehicle {vehicle} in spot {spotMatch.SpotNumber}");
-            return true;
+            return spotMatch;
         }
 
         var validSpot = _parkingSpots.FirstOrDefault(s => s.IsAvailable && s.Size > vehicle.Size);
@@ -30,11 +30,11 @@ public class ParkingManager
         {
             validSpot.AssignVehicle(vehicle);
             Console.WriteLine($"Parked vehicle {vehicle} in spot {validSpot.SpotNumber}");
-            return true;
+            return validSpot;
         }
 
         Console.WriteLine($"No available spot for vehicle {vehicle}");
-        return false;
+        return null;
     }
 
     public bool ReleaseVehicle(string licensePlate)
@@ -53,6 +53,6 @@ public class ParkingManager
 
     internal void Dump()
     {
-        Console.WriteLine(string.Join(" ", _parkingSpots.Select(s => s.ToString())));
+        Console.WriteLine(string.Join(Environment.NewLine, _parkingSpots.Select(s => s.ToString())));
     }
 }

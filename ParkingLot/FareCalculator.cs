@@ -2,19 +2,26 @@ namespace ParkingLotSystem;
 
 public class FareCalculator
 {
-    private readonly IFareStrategy _fareStrategy;
+    private readonly ICollection<IFareStrategy> _fareStrategies = [];
 
     public event EventHandler<FareCalculatedEventArgs>? OnFeeCalculated;
 
-    public FareCalculator(IFareStrategy fareStrategy)
+    public FareCalculator(ICollection<IFareStrategy> fareStrategies)
     {
-        _fareStrategy = fareStrategy;
+        _fareStrategies = fareStrategies;
     }
 
-    public decimal CalculateFare(Ticket ticket, decimal? inputFare = null)
+    public decimal CalculateFare(Ticket ticket, decimal inputFare = 0)
     {
-        var fare = _fareStrategy.CalculateFare(ticket) + (inputFare ?? 0);
+        var fare = inputFare;
+
+        foreach (var strategy in _fareStrategies)
+        {
+            fare = strategy.CalculateFare(ticket, fare);
+        }
+
         OnFeeCalculated?.Invoke(this, new FareCalculatedEventArgs { Fare = fare, Ticket = ticket });
+
         return fare;
     }
 

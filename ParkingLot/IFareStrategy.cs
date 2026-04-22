@@ -2,5 +2,5 @@ namespace ParkingLotSystem;
 
 public interface IFareStrategy
 {
-    decimal CalculateFare(Ticket ticket);
+    decimal CalculateFare(Ticket ticket, decimal fare);
 }

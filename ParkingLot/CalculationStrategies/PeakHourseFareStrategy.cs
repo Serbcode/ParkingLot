@@ -2,17 +2,13 @@ namespace ParkingLotSystem.CalculationStrategies;
 
 public class PeakHoursFareStrategy : IFareStrategy
 {
-    public decimal CalculateFare(Ticket ticket)
+    private const decimal PeakHourSurcharge = 1.5m;
+
+    public decimal CalculateFare(Ticket ticket, decimal fare)
     {
-        var baseFare = new BaseFareStrategy().CalculateFare(ticket);
-        var entryHour = ticket.EntryTime.Hour;
-
-        // Define peak hours (e.g., 8 AM to 6 PM)
-        if (entryHour >= 8 && entryHour < 18)
-        {
-            return baseFare * 1.5m; // 50% surcharge during peak hours
-        }
-
-        return baseFare;
+        return IsPeakHour(ticket.EntryTime) ? fare * PeakHourSurcharge : fare;
     }
+
+    private static bool IsPeakHour(DateTime time) =>
+        time.Hour >= 8 && time.Hour < 18;
 }

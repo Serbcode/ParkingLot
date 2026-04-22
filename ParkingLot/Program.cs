@@ -2,10 +2,13 @@
 
 namespace ParkingLotSystem;
 
-public static class Program
+public class Program
 {
     public static void Main()
     {
+        Console.WriteLine();
+        IDateTimeService dateTimeService = new SystemDateTimeService();
+
         var vehicle1 = new Car("CAR 282 BA");
         var vehicle2 = new Motorcycle("MOTO 001 NO");
 
@@ -21,24 +24,26 @@ public static class Program
             new CompactSpot(8),
             new RegularSpot(9),
         };
-        var pm = new ParkingManager(parkingSpots);
+        var parkingManager = new ParkingManager(parkingSpots);
 
-        pm.ParkVehicle(vehicle1);
-        pm.ParkVehicle(vehicle2);
-
-        pm.Dump();
-
-        FareCalculator fareCalculator = new FareCalculator(new PeakHoursFareStrategy());
-        var ticket1 = new Ticket("TICKET-001", vehicle1, parkingSpots[1], DateTime.Now.AddHours(-3), DateTime.Now);
-        var ticket2 = new Ticket("TICKET-002", vehicle2, parkingSpots[3], DateTime.Now.AddHours(-1), DateTime.Now);
-
+        FareCalculator fareCalculator = new FareCalculator([new BaseFareStrategy(), new PeakHoursFareStrategy()]);
         fareCalculator.OnFeeCalculated += (sender, args) =>
         {
             Console.WriteLine($"Fare calculated for {args.Ticket.Vehicle.LicensePlate}: {args.Fare:C}");
         };
 
-        fareCalculator.CalculateFare(ticket1);
-        fareCalculator.CalculateFare(ticket2);
+        var lot = new ParkingLot(parkingManager, fareCalculator);
+
+        var ticket1 = lot.EnterVehicle(vehicle1, DateTime.Now, DateTime.Now.AddHours(5));
+        var ticket2 = lot.EnterVehicle(vehicle2, DateTime.Now, DateTime.Now.AddHours(5));
+
+        lot.ParkingManager.Dump();
+
+        lot.LeaveVehicle(ticket1!);
+
+        Console.WriteLine();
+
+        lot.LeaveVehicle(ticket2!);
     }
 }
 
