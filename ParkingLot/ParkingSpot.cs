@@ -46,8 +46,8 @@ public class ParkingSpot(int spotNumber, VehicleSize size)
     }
 }
 
-public class CompactSpot(int SpotNumber) : ParkingSpot(SpotNumber, VehicleSize.Small);
+public class CompactSpot(int spotNumber) : ParkingSpot(spotNumber, VehicleSize.Small);
 
-public class RegularSpot(int SpotNumber) : ParkingSpot(SpotNumber, VehicleSize.Medium);
+public class RegularSpot(int spotNumber) : ParkingSpot(spotNumber, VehicleSize.Medium);
 
-public class OversizedSpot(int SpotNumber) : ParkingSpot(SpotNumber, VehicleSize.Large);
+public class OversizedSpot(int spotNumber) : ParkingSpot(spotNumber, VehicleSize.Large);

@@ -9,8 +9,8 @@ public class Program
         Console.WriteLine();
         IDateTimeService dateTimeService = new SystemDateTimeService();
 
-        var vehicle1 = new Car("CAR 282 BA");
-        var vehicle2 = new Motorcycle("MOTO 001 NO");
+        var car = new Car("CAR 282 BA");
+        var motorcycle = new Motorcycle("MOTO 001 NO");
 
         var parkingSpots = new List<ParkingSpot>
         {
@@ -32,18 +32,18 @@ public class Program
             Console.WriteLine($"Fare calculated for {args.Ticket.Vehicle.LicensePlate}: {args.Fare:C}");
         };
 
-        var lot = new ParkingLot(parkingManager, fareCalculator);
+        var parkingLot = new ParkingLot(parkingManager, fareCalculator, dateTimeService);
 
-        var ticket1 = lot.EnterVehicle(vehicle1, DateTime.Now, DateTime.Now.AddHours(5));
-        var ticket2 = lot.EnterVehicle(vehicle2, DateTime.Now, DateTime.Now.AddHours(5));
+        var carTicket = parkingLot.EnterVehicle(car, dateTimeService.Now.AddHours(5));
+        var motorcycleTicket = parkingLot.EnterVehicle(motorcycle, dateTimeService.Now.AddHours(5));
 
-        lot.ParkingManager.Dump();
+        parkingLot.ParkingManager.Dump();
 
-        lot.LeaveVehicle(ticket1!);
+        parkingLot.LeaveVehicle(carTicket!);
 
         Console.WriteLine();
 
-        lot.LeaveVehicle(ticket2!);
+        parkingLot.LeaveVehicle(motorcycleTicket!);
     }
 }
 

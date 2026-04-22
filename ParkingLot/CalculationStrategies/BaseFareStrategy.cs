@@ -1,4 +1,3 @@
-
 namespace ParkingLotSystem.CalculationStrategies;
 
 public class BaseFareStrategy : IFareStrategy
@@ -9,7 +8,7 @@ public class BaseFareStrategy : IFareStrategy
 
     public decimal CalculateFare(Ticket ticket, decimal fare)
     {
-        var duration = ticket.CalculateParkingDuration();
+        var duration = ticket.ExitTime - ticket.EntryTime;
 
         var fee = ticket.Vehicle.Size switch
         {
