@@ -43,6 +43,7 @@ public class ParkingSpot(int spotNumber, VehicleSize size)
             CompactSpot => $"[🏍️- {AssignedVehicle?.LicensePlate}]",
             RegularSpot => $"[🚗 - {AssignedVehicle?.LicensePlate}]",
             OversizedSpot => $"[🚚 - {AssignedVehicle?.LicensePlate}]",
+            HandicappedSpot => $"[♿ - {AssignedVehicle?.LicensePlate}]",
             _ => $"[Unknown Spot {SpotNumber}]"
         };
     }

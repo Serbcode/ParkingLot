@@ -22,9 +22,7 @@ public class Program
             new CompactSpot(4),
             new RegularSpot(5),
             new OversizedSpot(6),
-            new CompactSpot(7),
-            new CompactSpot(8),
-            new RegularSpot(9),
+            new HandicappedSpot(7)
         };
         var parkingManager = new ParkingManager(parkingSpots);
 
