@@ -1,3 +1,5 @@
+using ParkingLotSystem.Vehicles;
+
 namespace ParkingLotSystem;
 
 public class ParkingLot

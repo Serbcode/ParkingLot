@@ -1,4 +1,6 @@
-namespace ParkingLotSystem;
+using ParkingLotSystem.Vehicles;
+
+namespace ParkingLotSystem.ParkingSpots;
 
 /// <summary>
 /// tracks size, availability, and assigned vehicle.
@@ -45,9 +47,3 @@ public class ParkingSpot(int spotNumber, VehicleSize size)
         };
     }
 }
-
-public class CompactSpot(int spotNumber) : ParkingSpot(spotNumber, VehicleSize.Small);
-
-public class RegularSpot(int spotNumber) : ParkingSpot(spotNumber, VehicleSize.Medium);
-
-public class OversizedSpot(int spotNumber) : ParkingSpot(spotNumber, VehicleSize.Large);

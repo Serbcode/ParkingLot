@@ -1,3 +1,7 @@
+
+using ParkingLotSystem.ParkingSpots;
+using ParkingLotSystem.Vehicles;
+
 namespace ParkingLotSystem;
 
 public class ParkingManager

@@ -1,3 +1,5 @@
+using ParkingLotSystem.CalculationStrategies;
+
 namespace ParkingLotSystem;
 
 public class FareCalculator

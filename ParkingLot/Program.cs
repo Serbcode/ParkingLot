@@ -1,4 +1,6 @@
 ﻿using ParkingLotSystem.CalculationStrategies;
+using ParkingLotSystem.ParkingSpots;
+using ParkingLotSystem.Vehicles;
 
 namespace ParkingLotSystem;
 

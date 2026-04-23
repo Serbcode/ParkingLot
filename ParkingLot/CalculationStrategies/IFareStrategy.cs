@@ -1,4 +1,4 @@
-namespace ParkingLotSystem;
+namespace ParkingLotSystem.CalculationStrategies;
 
 public interface IFareStrategy
 {
