@@ -24,6 +24,11 @@ public class ParkingLot
             return null;
         }
 
+        if (spot.IsVip)
+        {
+            Console.WriteLine($"Spot {spot.SpotNumber} is VIP. Fare multiplier x2 will be applied.");
+        }
+
         return new Ticket(Guid.NewGuid().ToString(), vehicle, spot, _dateTimeService.Now, exitTime);
     }
 

@@ -5,10 +5,11 @@ namespace ParkingLotSystem.ParkingSpots;
 /// <summary>
 /// tracks size, availability, and assigned vehicle.
 /// </summary>
-public class ParkingSpot(int spotNumber, VehicleSize size)
+public class ParkingSpot(int spotNumber, VehicleSize size, bool isVip = false)
 {
     public readonly int SpotNumber = spotNumber;
     public readonly VehicleSize Size = size;
+    public bool IsVip { get; } = isVip;
 
     public Vehicle? AssignedVehicle { get; private set; } = null;
 
@@ -38,12 +39,14 @@ public class ParkingSpot(int spotNumber, VehicleSize size)
 
     public override string ToString()
     {
+        var vipLabel = IsVip ? " VIP" : string.Empty;
+
         return this switch
         {
-            CompactSpot => $"[🏍️- {AssignedVehicle?.LicensePlate}]",
-            RegularSpot => $"[🚗 - {AssignedVehicle?.LicensePlate}]",
-            OversizedSpot => $"[🚚 - {AssignedVehicle?.LicensePlate}]",
-            HandicappedSpot => $"[♿ - {AssignedVehicle?.LicensePlate}]",
+            CompactSpot => $"[🏍️- {AssignedVehicle?.LicensePlate}{vipLabel}]",
+            RegularSpot => $"[🚗 - {AssignedVehicle?.LicensePlate}{vipLabel}]",
+            OversizedSpot => $"[🚚 - {AssignedVehicle?.LicensePlate}{vipLabel}]",
+            HandicappedSpot => $"[♿ - {AssignedVehicle?.LicensePlate}{vipLabel}]",
             _ => $"[Unknown Spot {SpotNumber}]"
         };
     }
