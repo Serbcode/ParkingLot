@@ -22,7 +22,7 @@ public class Program
             new OversizedSpot(3),
             new CompactSpot(4),
             new RegularSpot(5, isVip: true),
-            new OversizedSpot(6),
+            // new OversizedSpot(6),
             new HandicappedSpot(7)
         };
         var parkingManager = new ParkingManager(parkingSpots);
@@ -30,7 +30,8 @@ public class Program
         FareCalculator fareCalculator = new FareCalculator([
             new BaseFareStrategy(),
             new PeakHoursFareStrategy(),
-            new VipSpotFareStrategy()
+            new VipSpotFareStrategy(),
+            new BonusFareStrategy(new HolidayService())
         ]);
         fareCalculator.OnFeeCalculated += (sender, args) =>
         {
@@ -57,6 +58,8 @@ public class Program
         parkingLot.LeaveVehicle(blockerTicket!);
     }
 }
+
+
 
 
 
