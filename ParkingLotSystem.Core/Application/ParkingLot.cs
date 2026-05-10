@@ -7,12 +7,18 @@ public class ParkingLot
     public readonly ParkingManager ParkingManager;
     private readonly FareCalculator _fareCalculator;
     private readonly IDateTimeService _dateTimeService;
+    private readonly ILogger<ParkingLot> _logger;
 
-    public ParkingLot(ParkingManager parkingManager, FareCalculator fareCalculator, IDateTimeService dateTimeService)
+    public ParkingLot(
+        ParkingManager parkingManager,
+        FareCalculator fareCalculator,
+        IDateTimeService dateTimeService,
+        ILogger<ParkingLot>? logger = null)
     {
         ParkingManager = parkingManager;
         _fareCalculator = fareCalculator;
         _dateTimeService = dateTimeService;
+        _logger = logger ?? NullLogger<ParkingLot>.Instance;
     }
 
     public Ticket? EnterVehicle(Vehicle vehicle, DateTime exitTime)
@@ -20,13 +26,13 @@ public class ParkingLot
         var spot = ParkingManager.ParkVehicle(vehicle);
         if (spot is null)
         {
-            Console.WriteLine($"Unable to park vehicle {vehicle}. No suitable spot available!");
+            _logger.LogInformation($"Unable to park vehicle {vehicle}. No suitable spot available!");
             return null;
         }
 
         if (spot.IsVip)
         {
-            Console.WriteLine($"Spot {spot.SpotNumber} is VIP. Fare multiplier x2 will be applied.");
+            _logger.LogInformation($"Spot {spot.SpotNumber} is VIP. Fare multiplier x2 will be applied.");
         }
 
         return new Ticket(Guid.NewGuid().ToString(), vehicle, spot, _dateTimeService.Now, exitTime);
@@ -40,7 +46,7 @@ public class ParkingLot
         }
 
         var fee = _fareCalculator.CalculateFare(ticket);
-        Console.WriteLine($"Vehicle {ticket.Vehicle} is leaving. Total fee: {fee:C}");
+        _logger.LogInformation($"Vehicle {ticket.Vehicle} is leaving. Total fee: {fee:C}");
 
         ParkingManager.ReleaseVehicle(ticket.Vehicle.LicensePlate);
     }

@@ -48,6 +48,35 @@ public class ParkingManagerTests
     }
 
     [Fact]
+    public void ParkVehicle_SkipsSpotsUnderConstructionAndCleaning()
+    {
+        var underConstructionSpot = new RegularSpot(1);
+        var cleaningSpot = new RegularSpot(2);
+        var availableSpot = new RegularSpot(3);
+        underConstructionSpot.MarkUnderConstruction();
+        cleaningSpot.MarkCleaning();
+        var manager = new ParkingManager([underConstructionSpot, cleaningSpot, availableSpot]);
+
+        var spot = manager.ParkVehicle(new Car("CAR-1"));
+
+        Assert.Same(availableSpot, spot);
+        Assert.Equal(ParkingSpotStatus.UnderConstruction, underConstructionSpot.Status);
+        Assert.Equal(ParkingSpotStatus.Cleaning, cleaningSpot.Status);
+    }
+
+    [Fact]
+    public void ParkedVehicles_DoesNotIncludeUnavailableEmptySpots()
+    {
+        var underConstructionSpot = new RegularSpot(1);
+        var cleaningSpot = new RegularSpot(2);
+        underConstructionSpot.MarkUnderConstruction();
+        cleaningSpot.MarkCleaning();
+        var manager = new ParkingManager([underConstructionSpot, cleaningSpot]);
+
+        Assert.Empty(manager.ParkedVehicles);
+    }
+
+    [Fact]
     public void ReleaseVehicle_ReleasesMatchingSpot()
     {
         var car = new Car("CAR-1");

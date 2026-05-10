@@ -8,7 +8,9 @@ public class Program
 {
     public static void Main()
     {
-        Console.WriteLine();
+        var logger = new ConsoleLogger<Program>();
+        logger.LogInformation(string.Empty);
+
         IDateTimeService dateTimeService = new SystemDateTimeService();
 
         var blockerCar = new Car("CAR 111 VIP");
@@ -25,7 +27,11 @@ public class Program
             // new OversizedSpot(6),
             new HandicappedSpot(7)
         };
-        var parkingManager = new ParkingManager(parkingSpots);
+
+        parkingSpots[2].MarkUnderConstruction();
+        parkingSpots[5].MarkCleaning();
+
+        var parkingManager = new ParkingManager(parkingSpots, new ConsoleLogger<ParkingManager>());
 
         FareCalculator fareCalculator = new FareCalculator([
             new BaseFareStrategy(),
@@ -35,10 +41,10 @@ public class Program
         ]);
         fareCalculator.OnFeeCalculated += (sender, args) =>
         {
-            Console.WriteLine($"Fare calculated for {args.Ticket.Vehicle.LicensePlate}: {args.Fare:C}");
+            logger.LogInformation($"Fare calculated for {args.Ticket.Vehicle.LicensePlate}: {args.Fare:C}");
         };
 
-        var parkingLot = new ParkingLot(parkingManager, fareCalculator, dateTimeService);
+        var parkingLot = new ParkingLot(parkingManager, fareCalculator, dateTimeService, new ConsoleLogger<ParkingLot>());
 
         // Occupy the first regular spot so the next medium vehicle is forced to VIP spot #5.
         var blockerTicket = parkingLot.EnterVehicle(blockerCar, dateTimeService.Now.AddHours(1));
@@ -47,12 +53,16 @@ public class Program
 
         parkingLot.ParkingManager.Dump();
 
-        Console.WriteLine();
-        Console.WriteLine("Expected: CAR 282 BA should be parked on VIP spot and billed with x2 multiplier.");
+        parkingSpots[5].MarkAvailable();
+        logger.LogInformation(string.Empty);
+        logger.LogInformation($"Spot {parkingSpots[5].SpotNumber} was cleaned and is now {parkingSpots[5].Status}.");
+
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("Expected: CAR 282 BA should be parked on VIP spot and billed with x2 multiplier.");
 
         parkingLot.LeaveVehicle(carTicket!);
 
-        Console.WriteLine();
+        logger.LogInformation(string.Empty);
 
         parkingLot.LeaveVehicle(motorcycleTicket!);
         parkingLot.LeaveVehicle(blockerTicket!);

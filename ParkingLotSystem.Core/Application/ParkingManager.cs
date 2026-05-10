@@ -7,10 +7,12 @@ public class ParkingManager
 {
     private readonly Lock _parkingLock = new();
     private readonly List<ParkingSpot> _parkingSpots;
+    private readonly ILogger<ParkingManager> _logger;
 
-    public ParkingManager(List<ParkingSpot> parkingSpots)
+    public ParkingManager(List<ParkingSpot> parkingSpots, ILogger<ParkingManager>? logger = null)
     {
         _parkingSpots = parkingSpots;
+        _logger = logger ?? NullLogger<ParkingManager>.Instance;
     }
 
     public IReadOnlyCollection<Vehicle> ParkedVehicles
@@ -19,7 +21,10 @@ public class ParkingManager
         {
             lock (_parkingLock)
             {
-                return _parkingSpots.Where(s => s.IsTaken).Select(s => s.AssignedVehicle!).ToList();
+                return _parkingSpots
+                    .Where(s => s.AssignedVehicle is not null)
+                    .Select(s => s.AssignedVehicle!)
+                    .ToList();
             }
         }
     }
@@ -43,7 +48,7 @@ public class ParkingManager
             if (spotMatch is not null)
             {
                 spotMatch.AssignVehicle(vehicle);
-                Console.WriteLine($"Parked vehicle {vehicle} in spot {spotMatch.SpotNumber}");
+                _logger.LogInformation($"Parked vehicle {vehicle} in spot {spotMatch.SpotNumber}");
                 return spotMatch;
             }
 
@@ -51,12 +56,12 @@ public class ParkingManager
             if (validSpot is not null)
             {
                 validSpot.AssignVehicle(vehicle);
-                Console.WriteLine($"Parked vehicle {vehicle} in spot {validSpot.SpotNumber}");
+                _logger.LogInformation($"Parked vehicle {vehicle} in spot {validSpot.SpotNumber}");
                 return validSpot;
             }
         }
 
-        Console.WriteLine($"No available spot for vehicle {vehicle}");
+        _logger.LogInformation($"No available spot for vehicle {vehicle}");
         return null;
     }
 
@@ -75,19 +80,19 @@ public class ParkingManager
 
         if (spot is null)
         {
-            Console.WriteLine($"No vehicle with license plate {licensePlate} found in the parking lot.");
+            _logger.LogInformation($"No vehicle with license plate {licensePlate} found in the parking lot.");
             return false;
         }
 
-        Console.WriteLine($"Released vehicle with license plate {licensePlate} from spot {spot.SpotNumber}");
+        _logger.LogInformation($"Released vehicle with license plate {licensePlate} from spot {spot.SpotNumber}");
         return true;
     }
 
-    internal void Dump()
+    public void Dump()
     {
         lock (_parkingLock)
         {
-            Console.WriteLine(string.Join(Environment.NewLine, _parkingSpots.Select(s => s.ToString())));
+            _logger.LogInformation(string.Join(Environment.NewLine, _parkingSpots.Select(s => s.ToString())));
         }
     }
 }

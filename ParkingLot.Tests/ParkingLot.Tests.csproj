@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ParkingLot\ParkingLot.csproj" />
+    <ProjectReference Include="..\ParkingLotSystem.Core\ParkingLotSystem.Core.csproj" />
   </ItemGroup>
 
 </Project>
