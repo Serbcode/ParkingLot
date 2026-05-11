@@ -52,6 +52,29 @@ public class FareCalculatorTests
     }
 
     [Fact]
+    public void CalculateFare_AppliesCombinedStrategiesIncludingTrackedSurcharge()
+    {
+        var ticket = new Ticket(
+            TicketNumber: "T-3",
+            Vehicle: new Car("CAR-TRK", IsDirty: true, IsTracked: true),
+            Spot: new RegularSpot(10, isVip: true),
+            EntryTime: new DateTime(2026, 4, 27, 10, 0, 0),
+            ExitTime: new DateTime(2026, 4, 27, 12, 0, 0));
+
+        var calculator = new FareCalculator([
+            new BaseFareStrategy(),
+            new PeakHoursFareStrategy(),
+            new VipSpotFareStrategy(),
+            new DirtyVehicleFareStrategy(),
+            new TrackedVehicleFareStrategy()
+        ]);
+
+        var fare = calculator.CalculateFare(ticket);
+
+        Assert.Equal(16.38m, fare);
+    }
+
+    [Fact]
     public void HolidayService_UsesConfiguredHolidayDates()
     {
         var holidayService = new HolidayService(

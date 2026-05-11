@@ -16,6 +16,7 @@ public class Program
         var blockerCar = new Car("CAR 111 VIP");
         var car = new Car("CAR 282 BA");
         var motorcycle = new Motorcycle("MOTO 001 NO");
+        var trackedCar = new Car("CAR 909 TRK", IsTracked: true);
 
         var parkingSpots = new List<ParkingSpot>()
         {
@@ -34,12 +35,15 @@ public class Program
 
         var parkingManager = new ParkingManager(parkingSpots, new ConsoleLogger<ParkingManager>());
 
-        FareCalculator fareCalculator = new FareCalculator([
+        FareCalculator fareCalculator = new([
             new BaseFareStrategy(),
             new PeakHoursFareStrategy(),
             new VipSpotFareStrategy(),
-            new BonusFareStrategy(new HolidayService())
+            new BonusFareStrategy(new HolidayService()),
+            new DirtyVehicleFareStrategy(),
+            new TrackedVehicleFareStrategy()
         ]);
+
         fareCalculator.OnFeeCalculated += (sender, args) =>
         {
             logger.LogInformation($"Fare calculated for {args.Ticket.Vehicle.LicensePlate}: {args.Fare:C}");
@@ -67,6 +71,15 @@ public class Program
 
         parkingLot.LeaveVehicle(motorcycleTicket!);
         parkingLot.LeaveVehicle(blockerTicket!);
+
+        logger.LogInformation(string.Empty);
+        logger.LogInformation("Expected: CAR 909 TRK is tracked and should receive tracked vehicle surcharge (x2). ");
+
+        var trackedTicket = parkingLot.EnterVehicle(trackedCar, dateTimeService.Now.AddHours(2));
+        if (trackedTicket != null)
+        {
+            parkingLot.LeaveVehicle(trackedTicket);
+        }
 
         var superCar = new SuperCar("SCAR 001 VIP");
 
