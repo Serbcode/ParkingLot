@@ -14,10 +14,11 @@ public class BaseFareStrategy : IFareStrategy
 
         var fee = ticket.Vehicle.Size switch
         {
-
             VehicleSize.Small => SmallVehicleRate * (decimal)duration.TotalHours,
             VehicleSize.Medium => MediumVehicleRate * (decimal)duration.TotalHours,
             VehicleSize.Large => LargeVehicleRate * (decimal)duration.TotalHours,
+            VehicleSize.SuperCar => 2.5m * (decimal)duration.TotalHours,
+            VehicleSize.SuperBike => 0.8m * (decimal)duration.TotalHours,
             _ => throw new NotImplementedException(),
         };
 

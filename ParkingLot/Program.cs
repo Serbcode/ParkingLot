@@ -17,15 +17,16 @@ public class Program
         var car = new Car("CAR 282 BA");
         var motorcycle = new Motorcycle("MOTO 001 NO");
 
-        var parkingSpots = new List<ParkingSpot>
+        var parkingSpots = new List<ParkingSpot>()
         {
-            new OversizedSpot(1),
+            new CompactSpot(1),
             new RegularSpot(2),
-            new OversizedSpot(3),
-            new CompactSpot(4),
+            new CompactSpot(3),
+            new RegularSpot(4),
             new RegularSpot(5, isVip: true),
-            // new OversizedSpot(6),
-            new HandicappedSpot(7)
+            new OversizedSpot(6),
+            new HandicappedSpot(7),
+            new SuperSpot(8, isVip: true) // Added SuperSpot for SuperCar
         };
 
         parkingSpots[2].MarkUnderConstruction();
@@ -66,13 +67,22 @@ public class Program
 
         parkingLot.LeaveVehicle(motorcycleTicket!);
         parkingLot.LeaveVehicle(blockerTicket!);
+
+        var superCar = new SuperCar("SCAR 001 VIP");
+
+        // Park the SuperCar only if a spot is available
+        var superCarTicket = parkingLot.EnterVehicle(superCar, dateTimeService.Now.AddHours(3));
+        if (superCarTicket != null)
+        {
+            logger.LogInformation(string.Empty);
+            logger.LogInformation("SuperCar 'SCAR 001 VIP' has been parked.");
+            parkingLot.LeaveVehicle(superCarTicket);
+            logger.LogInformation("SuperCar 'SCAR 001 VIP' has left the parking lot.");
+        }
+        else
+        {
+            logger.LogInformation("No available spot for SuperCar 'SCAR 001 VIP'.");
+        }
     }
 }
-
-
-
-
-
-
-
 

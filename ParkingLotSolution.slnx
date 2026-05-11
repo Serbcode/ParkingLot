@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="ParkingLot.Tests/ParkingLot.Tests.csproj" />
   <Project Path="ParkingLot/ParkingLot.csproj" />
+  <Project Path="ParkingLog.Infrastructure/ParkingLog.Infrastructure.csproj" />
   <Project Path="ParkingLotSystem.Core/ParkingLotSystem.Core.csproj" />
 </Solution>
