@@ -1,3 +1,4 @@
+using ParkingLotSystem.Core.Domain;
 using ParkingLotSystem.ParkingSpots;
 using ParkingLotSystem.Vehicles;
 
@@ -77,8 +78,8 @@ public class ParkingSpotStateTests
         underConstructionSpot.MarkUnderConstruction();
         cleaningSpot.MarkCleaning();
 
-        Assert.Throws<ApplicationException>(() => underConstructionSpot.AssignVehicle(new Car("CAR-1")));
-        Assert.Throws<ApplicationException>(() => cleaningSpot.AssignVehicle(new Car("CAR-2")));
+        Assert.Throws<DomainError>(() => underConstructionSpot.AssignVehicle(new Car("CAR-1")));
+        Assert.Throws<DomainError>(() => cleaningSpot.AssignVehicle(new Car("CAR-2")));
     }
 
     [Fact]
@@ -104,8 +105,9 @@ public class ParkingSpotStateTests
         var spot = new RegularSpot(1);
         spot.AssignVehicle(new Car("CAR-1"));
 
-        Assert.Throws<ApplicationException>(spot.MarkCleaning);
-        Assert.Throws<ApplicationException>(spot.MarkUnderConstruction);
-        Assert.Throws<ApplicationException>(spot.MarkAvailable);
+        Assert.Throws<DomainError>(() => spot.MarkCleaning());
+        Assert.Throws<DomainError>(() => spot.MarkUnderConstruction());
+        Assert.Throws<DomainError>(() => spot.MarkAvailable());
     }
 }
+

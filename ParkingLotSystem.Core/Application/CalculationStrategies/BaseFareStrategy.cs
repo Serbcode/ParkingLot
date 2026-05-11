@@ -1,4 +1,5 @@
 using ParkingLotSystem.Vehicles;
+using ParkingLotSystem.Core.Domain;
 
 namespace ParkingLotSystem.CalculationStrategies;
 
@@ -19,7 +20,7 @@ public class BaseFareStrategy : IFareStrategy
             VehicleSize.Large => LargeVehicleRate * (decimal)duration.TotalHours,
             VehicleSize.SuperCar => 2.5m * (decimal)duration.TotalHours,
             VehicleSize.SuperBike => 0.8m * (decimal)duration.TotalHours,
-            _ => throw new NotImplementedException(),
+            _ => throw new DomainError("Fare calculation for this vehicle size is not implemented."),
         };
 
         return fare += fee;

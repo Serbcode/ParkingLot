@@ -1,3 +1,4 @@
+using ParkingLotSystem.Core.Domain;
 using ParkingLotSystem.Vehicles;
 
 namespace ParkingLotSystem.ParkingSpots.States;
@@ -16,10 +17,11 @@ internal sealed class CleaningParkingSpotState : IParkingSpotState
 
     public void AssignVehicle(ParkingSpot spot, Vehicle vehicle)
     {
-        throw new ApplicationException($"The spot {spot.SpotNumber} is being cleaned!");
+        throw new DomainError($"The spot {spot.SpotNumber} is being cleaned!");
     }
 
     public void Release(ParkingSpot spot)
     {
     }
 }
+

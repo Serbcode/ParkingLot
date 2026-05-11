@@ -1,4 +1,5 @@
 using ParkingLotSystem.Vehicles;
+using ParkingLotSystem.Core.Domain;
 
 namespace ParkingLotSystem.ParkingSpots.States;
 
@@ -10,7 +11,7 @@ internal sealed class OccupiedParkingSpotState(Vehicle assignedVehicle) : IParki
 
     public void AssignVehicle(ParkingSpot spot, Vehicle vehicle)
     {
-        throw new ApplicationException($"The spot {spot.SpotNumber} is already taken!");
+        throw new DomainError($"The spot {spot.SpotNumber} is already taken!");
     }
 
     public void Release(ParkingSpot spot)
@@ -18,3 +19,4 @@ internal sealed class OccupiedParkingSpotState(Vehicle assignedVehicle) : IParki
         spot.SetState(AvailableParkingSpotState.Instance);
     }
 }
+

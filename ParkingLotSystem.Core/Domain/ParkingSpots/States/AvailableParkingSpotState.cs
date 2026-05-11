@@ -1,4 +1,5 @@
 using ParkingLotSystem.Vehicles;
+using ParkingLotSystem.Core.Domain;
 
 namespace ParkingLotSystem.ParkingSpots.States;
 
@@ -18,7 +19,7 @@ internal sealed class AvailableParkingSpotState : IParkingSpotState
     {
         if (vehicle.Size > spot.Size)
         {
-            throw new ApplicationException($"Vehicle {vehicle} cannot be parked into spot {spot.SpotNumber}");
+            throw new DomainError($"Vehicle {vehicle} cannot be parked into spot {spot.SpotNumber}");
         }
 
         spot.SetState(new OccupiedParkingSpotState(vehicle));
@@ -28,3 +29,4 @@ internal sealed class AvailableParkingSpotState : IParkingSpotState
     {
     }
 }
+

@@ -1,5 +1,6 @@
 using ParkingLotSystem.Vehicles;
 using ParkingLotSystem.ParkingSpots.States;
+using ParkingLotSystem.Core.Domain;
 
 namespace ParkingLotSystem.ParkingSpots;
 
@@ -45,6 +46,10 @@ public class ParkingSpot(int spotNumber, VehicleSize size, bool isVip = false)
 
     public void MarkCleaning()
     {
+        if (AssignedVehicle is not null)
+        {
+            throw new DomainError($"The spot {SpotNumber} must be released before changing state!");
+        }
         EnsureNoAssignedVehicle();
         SetState(CleaningParkingSpotState.Instance);
     }
@@ -58,7 +63,7 @@ public class ParkingSpot(int spotNumber, VehicleSize size, bool isVip = false)
     {
         if (AssignedVehicle is not null)
         {
-            throw new ApplicationException($"The spot {SpotNumber} must be released before changing state!");
+            throw new DomainError($"The spot {SpotNumber} must be released before changing state!");
         }
     }
 
@@ -82,3 +87,4 @@ public class ParkingSpot(int spotNumber, VehicleSize size, bool isVip = false)
         };
     }
 }
+
